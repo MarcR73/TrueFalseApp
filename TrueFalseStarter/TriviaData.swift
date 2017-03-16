@@ -17,8 +17,8 @@ struct TriviaProvider {
     }
 }
 
-struct TriviaData {
-    let trivia: [TriviaProvider] = [TriviaProvider(question: "This was the only US President to serve more than two consecutive terms.", options: ["George Washington", "Franklin D. Roosevelt","Woodrow Wilson","Andrew Jackson"], correctAnswer: 2),
+
+let trivia: [TriviaProvider] = [TriviaProvider(question: "This was the only US President to serve more than two consecutive terms.", options: ["George Washington", "Franklin D. Roosevelt","Woodrow Wilson","Andrew Jackson"], correctAnswer: 2),
                                         TriviaProvider(question: "Which of the following countries has the most residents?", options: ["Nigeria", "Russia", "Iran", "Vietnam"], correctAnswer: 1),
                                         TriviaProvider(question: "In what year was the United Nations founded?", options: ["1918", "1919", "1945", "1954"], correctAnswer: 3),
                                         TriviaProvider(question: "The Titanic departed from the United Kingdom, where was it supposed to arrive?", options: ["Paris", "Washington D.C.", "New York City", "Boston"], correctAnswer: 3),
@@ -29,6 +29,6 @@ struct TriviaData {
                                         TriviaProvider(question: "Which country was the first to allow women to vote in national elections?", options: ["Poland", "United States", "Sweden", "Senegal"], correctAnswer: 1),
                                         TriviaProvider(question: "Which of these countries won the most medals in the 2012 Summer Games?", options: ["France", "Germany", "Japan", "Great Brittain"], correctAnswer: 4)
     ]
-}
+
 
 

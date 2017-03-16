@@ -18,15 +18,13 @@ class ViewController: UIViewController {
     var indexOfSelectedQuestion: Int = 0
     
     var gameSound: SystemSoundID = 0
-
-
-    //Load data from triviadata struct
-    let trivia = TriviaData()
     
     @IBOutlet weak var questionField: UILabel!
-    @IBOutlet weak var trueButton: UIButton!
-    @IBOutlet weak var falseButton: UIButton!
     @IBOutlet weak var playAgainButton: UIButton!
+    @IBOutlet weak var firstButton: UIButton!
+    @IBOutlet weak var secondButton: UIButton!
+    @IBOutlet weak var thirdButton: UIButton!
+    @IBOutlet weak var fourthButton: UIButton!
     
 
     override func viewDidLoad() {
@@ -35,6 +33,11 @@ class ViewController: UIViewController {
         // Start game
         playGameStartSound()
         displayQuestion()
+        firstButton.layer.cornerRadius = 8
+        secondButton.layer.cornerRadius = 8
+        thirdButton.layer.cornerRadius = 8
+        fourthButton.layer.cornerRadius = 8
+    
     }
 
     override func didReceiveMemoryWarning() {
@@ -42,19 +45,57 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    // Changed so the correct data is loaded
+    // Changed so the data of the new trivia struct is used
     func displayQuestion() {
-        indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextInt(upperBound: trivia.trivia.count)
-        let questionDictionary = trivia.trivia[indexOfSelectedQuestion]
+        indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextInt(upperBound: trivia.count)
+        let questionDictionary = trivia[indexOfSelectedQuestion]
         questionField.text = questionDictionary.question
+        switch questionDictionary.options.count {
+        case 1:
+            firstButton.isHidden = false
+            firstButton.setTitle(questionDictionary.options[0], for: .normal)
+            secondButton.isHidden = true
+            thirdButton.isHidden = true
+            fourthButton.isHidden = true
+        case 2:
+            firstButton.isHidden = false
+            firstButton.setTitle(questionDictionary.options[0], for: .normal)
+            secondButton.isHidden = false
+            secondButton.setTitle(questionDictionary.options[1], for: .normal)
+            thirdButton.isHidden = true
+            fourthButton.isHidden = true
+        case 3:
+            firstButton.isHidden = false
+            firstButton.setTitle(questionDictionary.options[0], for: .normal)
+            secondButton.isHidden = false
+            secondButton.setTitle(questionDictionary.options[1], for: .normal)
+            thirdButton.isHidden = false
+            thirdButton.setTitle(questionDictionary.options[2], for: .normal)
+            fourthButton.isHidden = true
+        case 4:
+            firstButton.isHidden = false
+            firstButton.setTitle(questionDictionary.options[0], for: .normal)
+            secondButton.isHidden = false
+            secondButton.setTitle(questionDictionary.options[1], for: .normal)
+            thirdButton.isHidden = false
+            thirdButton.setTitle(questionDictionary.options[2], for: .normal)
+            fourthButton.isHidden = false
+            fourthButton.setTitle(questionDictionary.options[3], for: .normal)
+        default:
+            firstButton.isHidden = false
+            firstButton.setTitle(questionDictionary.options[0], for: .normal)
+            secondButton.isHidden = true
+            thirdButton.isHidden = true
+            fourthButton.isHidden = true
+        }
         playAgainButton.isHidden = true
     }
     
     
     func displayScore() {
         // Hide the answer buttons
-        trueButton.isHidden = true
-        falseButton.isHidden = true
+        firstButton.isHidden = true
+        secondButton.isHidden = true
         
         // Display play again button
         playAgainButton.isHidden = false
@@ -68,9 +109,9 @@ class ViewController: UIViewController {
         questionsAsked += 1
         
         let selectedQuestionDict = trivia[indexOfSelectedQuestion]
-        let correctAnswer = selectedQuestionDict["Answer"]
+        let correctAnswer = selectedQuestionDict.CorrectAnswer()
         
-        if (sender === trueButton &&  correctAnswer == "True") || (sender === falseButton && correctAnswer == "False") {
+        if (sender === firstButton &&  correctAnswer == "True") || (sender === secondButton && correctAnswer == "False") {
             correctQuestions += 1
             questionField.text = "Correct!"
         } else {
@@ -92,8 +133,8 @@ class ViewController: UIViewController {
     
     @IBAction func playAgain() {
         // Show the answer buttons
-        trueButton.isHidden = false
-        falseButton.isHidden = false
+        firstButton.isHidden = false
+        secondButton.isHidden = false
         
         questionsAsked = 0
         correctQuestions = 0
