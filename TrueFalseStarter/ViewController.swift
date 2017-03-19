@@ -16,15 +16,15 @@ class ViewController: UIViewController {
     var questionsAsked = 0
     var correctQuestions = 0
     var indexOfSelectedQuestion: Int = 0
+    let trivia = QuestionsCollection()
+    var currentQuestion = QuestionProvider(question: "", options: [], correctAnswer: 0)
+
     
     var gameSound: SystemSoundID = 0
     
     @IBOutlet weak var questionField: UILabel!
     @IBOutlet weak var playAgainButton: UIButton!
-    @IBOutlet weak var firstButton: UIButton!
-    @IBOutlet weak var secondButton: UIButton!
-    @IBOutlet weak var thirdButton: UIButton!
-    @IBOutlet weak var fourthButton: UIButton!
+    @IBOutlet weak var answerLabel: UILabel!
     
 
     override func viewDidLoad() {
@@ -33,10 +33,7 @@ class ViewController: UIViewController {
         // Start game
         playGameStartSound()
         displayQuestion()
-        firstButton.layer.cornerRadius = 8
-        secondButton.layer.cornerRadius = 8
-        thirdButton.layer.cornerRadius = 8
-        fourthButton.layer.cornerRadius = 8
+
     
     }
 
@@ -47,57 +44,25 @@ class ViewController: UIViewController {
     
     // Changed so the data of the new trivia struct is used
     func displayQuestion() {
-        indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextInt(upperBound: trivia.count)
-        let questionDictionary = trivia[indexOfSelectedQuestion]
-        questionField.text = questionDictionary.question
-        switch questionDictionary.options.count {
-        case 1:
-            firstButton.isHidden = false
-            firstButton.setTitle(questionDictionary.options[0], for: .normal)
-            secondButton.isHidden = true
-            thirdButton.isHidden = true
-            fourthButton.isHidden = true
-        case 2:
-            firstButton.isHidden = false
-            firstButton.setTitle(questionDictionary.options[0], for: .normal)
-            secondButton.isHidden = false
-            secondButton.setTitle(questionDictionary.options[1], for: .normal)
-            thirdButton.isHidden = true
-            fourthButton.isHidden = true
-        case 3:
-            firstButton.isHidden = false
-            firstButton.setTitle(questionDictionary.options[0], for: .normal)
-            secondButton.isHidden = false
-            secondButton.setTitle(questionDictionary.options[1], for: .normal)
-            thirdButton.isHidden = false
-            thirdButton.setTitle(questionDictionary.options[2], for: .normal)
-            fourthButton.isHidden = true
-        case 4:
-            firstButton.isHidden = false
-            firstButton.setTitle(questionDictionary.options[0], for: .normal)
-            secondButton.isHidden = false
-            secondButton.setTitle(questionDictionary.options[1], for: .normal)
-            thirdButton.isHidden = false
-            thirdButton.setTitle(questionDictionary.options[2], for: .normal)
-            fourthButton.isHidden = false
-            fourthButton.setTitle(questionDictionary.options[3], for: .normal)
-        default:
-            firstButton.isHidden = false
-            firstButton.setTitle(questionDictionary.options[0], for: .normal)
-            secondButton.isHidden = true
-            thirdButton.isHidden = true
-            fourthButton.isHidden = true
-        }
+        // Make each button nice slightly rounded
+        
+        //Remove previous buttons
+       
+        
+        playAgainButton.layer.cornerRadius = 8
+        
+        currentQuestion = trivia.nextQuestion()
+        questionField.text = currentQuestion.question
+        removeButtons()
+        createButtons()
         playAgainButton.isHidden = true
     }
     
     
     func displayScore() {
-        // Hide the answer buttons
-        firstButton.isHidden = true
-        secondButton.isHidden = true
-        
+     
         // Display play again button
+        removeButtons()
         playAgainButton.isHidden = false
         
         questionField.text = "Way to go!\nYou got \(correctQuestions) out of \(questionsPerRound) correct!"
@@ -108,21 +73,21 @@ class ViewController: UIViewController {
         // Increment the questions asked counter
         questionsAsked += 1
         
-        let selectedQuestionDict = trivia[indexOfSelectedQuestion]
-        let correctAnswer = selectedQuestionDict.CorrectAnswer()
+        let correctAnswer = currentQuestion.CorrectAnswer()
         
-        if (sender === firstButton &&  correctAnswer == "True") || (sender === secondButton && correctAnswer == "False") {
+        if correctAnswer == sender.titleLabel?.text {
             correctQuestions += 1
-            questionField.text = "Correct!"
+            answerLabel.text = "Correct!"
+            sender.backgroundColor = UIColor.green
         } else {
-            questionField.text = "Sorry, wrong answer!"
+            answerLabel.text = "Sorry, wrong answer!"
         }
-        
-        loadNextRoundWithDelay(seconds: 2)
+        playAgainButton.setTitle("Next question", for: .normal)
+        playAgainButton.isHidden = false
     }
     
-    func nextRound() {
-        if questionsAsked == questionsPerRound {
+    @IBAction func nextRound() {
+        if questionsAsked == trivia.questions.count {
             // Game is over
             displayScore()
         } else {
@@ -131,15 +96,13 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func playAgain() {
-        // Show the answer buttons
-        firstButton.isHidden = false
-        secondButton.isHidden = false
-        
-        questionsAsked = 0
-        correctQuestions = 0
-        nextRound()
-    }
+
+    func playAgain() {
+    questionsAsked = 0
+    correctQuestions = 0
+    displayQuestion()
+
+}
     
 
     
@@ -165,6 +128,35 @@ class ViewController: UIViewController {
     
     func playGameStartSound() {
         AudioServicesPlaySystemSound(gameSound)
+    }
+    
+    func removeButtons() {
+        for locView in self.view.subviews {
+            if locView.isKind(of: UIButton.self) {
+            
+                locView.isHidden = true
+            }
+        }
+    }
+    
+    func createButtons(){
+        let buttonWidth: CGFloat = (self.view.bounds.width - 60)
+        var buttonY: CGFloat = self.view.bounds.height / 3.0  // our Starting Offset, could be 0
+        let buttonX: CGFloat = (self.view.bounds.width - buttonWidth) / 2.0
+        
+        let numberOfButtons = CGFloat(currentQuestion.options.count)
+        for answer in currentQuestion.options {
+            
+            let answerButton = UIButton(frame: CGRect(x: buttonX, y: buttonY, width: buttonWidth, height: 50))
+            buttonY = buttonY + ((self.view.bounds.height - (self.view.bounds.height / 3.0)) / (numberOfButtons + 1)) // we are going to space these UIButtons 50px apart
+
+            answerButton.layer.cornerRadius = 8  // get some fancy pantsy rounding
+            answerButton.backgroundColor = UIColor(red: 55/255.0, green: 118/255.0, blue: 147/255.0, alpha: 1.0)
+            answerButton.setTitle("\(answer)", for: .normal) // We are going to use the item name as the Button Title here.
+            answerButton.titleLabel?.text = "\(answer)"
+            answerButton.addTarget(self, action: #selector(ViewController.checkAnswer(_:)), for: .touchUpInside)
+            self.view.addSubview(answerButton)  // myView in this case is the view you want these buttons added
+        }
     }
 }
 
