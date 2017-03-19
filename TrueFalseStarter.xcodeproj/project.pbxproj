@@ -14,6 +14,8 @@
 		97093D461C913506001275BC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97093D441C913506001275BC /* LaunchScreen.storyboard */; };
 		97093D531C932116001275BC /* GameSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 97093D521C932116001275BC /* GameSound.wav */; };
 		FB0991631E7AFAA100592A11 /* TriviaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB0991621E7AFAA100592A11 /* TriviaData.swift */; };
+		FB6137151E7F33FC006E0606 /* woow.wav in Resources */ = {isa = PBXBuildFile; fileRef = FB6137141E7F33FC006E0606 /* woow.wav */; };
+		FB6137171E7F340B006E0606 /* buzzer.wav in Resources */ = {isa = PBXBuildFile; fileRef = FB6137161E7F340B006E0606 /* buzzer.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		97093D471C913506001275BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		97093D521C932116001275BC /* GameSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = GameSound.wav; sourceTree = "<group>"; };
 		FB0991621E7AFAA100592A11 /* TriviaData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TriviaData.swift; sourceTree = "<group>"; };
+		FB6137141E7F33FC006E0606 /* woow.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = woow.wav; path = ../../../../../Downloads/woow.wav; sourceTree = "<group>"; };
+		FB6137161E7F340B006E0606 /* buzzer.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = buzzer.wav; path = ../../../../../Downloads/buzzer.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +69,8 @@
 				97093D421C913506001275BC /* Assets.xcassets */,
 				97093D441C913506001275BC /* LaunchScreen.storyboard */,
 				97093D471C913506001275BC /* Info.plist */,
+				FB6137141E7F33FC006E0606 /* woow.wav */,
+				FB6137161E7F340B006E0606 /* buzzer.wav */,
 				97093D521C932116001275BC /* GameSound.wav */,
 			);
 			path = TrueFalseStarter;
@@ -132,7 +138,9 @@
 				97093D531C932116001275BC /* GameSound.wav in Resources */,
 				97093D461C913506001275BC /* LaunchScreen.storyboard in Resources */,
 				97093D431C913506001275BC /* Assets.xcassets in Resources */,
+				FB6137171E7F340B006E0606 /* buzzer.wav in Resources */,
 				97093D411C913506001275BC /* Main.storyboard in Resources */,
+				FB6137151E7F33FC006E0606 /* woow.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

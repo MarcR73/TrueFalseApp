@@ -21,6 +21,8 @@ class ViewController: UIViewController {
 
     
     var gameSound: SystemSoundID = 0
+    var correctAnswerSound: SystemSoundID = 1
+    var wrongAnswerSound: SystemSoundID = 2
     
     @IBOutlet weak var questionField: UILabel!
     @IBOutlet weak var playAgainButton: UIButton!
@@ -81,9 +83,11 @@ class ViewController: UIViewController {
             correctQuestions += 1
             answerLabel.text = "Correct!"
             answerLabel.textColor = UIColor(red: 55/255.0, green: 118/255.0, blue: 147/255.0, alpha: 1.0)
+            playCorrectAnswerSound()
         } else {
             answerLabel.text = "Sorry, wrong answer!"
             answerLabel.textColor = UIColor.orange
+            playWrongAnswerSound()
         }
         
         //disable all buttons and make gray, so it is not possible to change the answer
@@ -151,10 +155,29 @@ class ViewController: UIViewController {
         AudioServicesCreateSystemSoundID(soundURL as CFURL, &gameSound)
     }
     
+    func loadCorrectAnswerSound() {
+        let pathToSoundFile = Bundle.main.path(forResource: "woow", ofType: "wav")
+        let soundURL = URL(fileURLWithPath: pathToSoundFile!)
+        AudioServicesCreateSystemSoundID(soundURL as CFURL, &correctAnswerSound)
+    }
+
+    func loadWrongAnswerSound() {
+        let pathToSoundFile = Bundle.main.path(forResource: "buzzer", ofType: "wav")
+        let soundURL = URL(fileURLWithPath: pathToSoundFile!)
+        AudioServicesCreateSystemSoundID(soundURL as CFURL, &wrongAnswerSound)
+    }
+    
+    func playCorrectAnswerSound() {
+        AudioServicesPlaySystemSound(correctAnswerSound)
+    }
+    
     func playGameStartSound() {
         AudioServicesPlaySystemSound(gameSound)
     }
     
+    func playWrongAnswerSound() {
+        AudioServicesPlaySystemSound(wrongAnswerSound)
+    }
     
     
     /// Fill buttons with possible answers of current question
