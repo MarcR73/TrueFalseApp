@@ -25,6 +25,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var questionField: UILabel!
     @IBOutlet weak var playAgainButton: UIButton!
     @IBOutlet weak var answerLabel: UILabel!
+    @IBOutlet weak var answerButton1: UIButton!
+    @IBOutlet weak var answerButton2: UIButton!
+    @IBOutlet weak var answerButton3: UIButton!
+    @IBOutlet weak var answerButton4: UIButton!
     
 
     override func viewDidLoad() {
@@ -53,40 +57,57 @@ class ViewController: UIViewController {
         
         currentQuestion = trivia.nextQuestion()
         questionField.text = currentQuestion.question
-        removeButtons()
         createButtons()
-        playAgainButton.isHidden = true
+    
     }
     
     
     func displayScore() {
      
         // Display play again button
-        removeButtons()
         playAgainButton.isHidden = false
-        
-        questionField.text = "Way to go!\nYou got \(correctQuestions) out of \(questionsPerRound) correct!"
-        
+        playAgainButton.setTitle("Play Again", for: .normal)
+        questionField.text = "Way to go!\nYou got \(correctQuestions) out of \(trivia.questions.count) correct!"
     }
     
     @IBAction func checkAnswer(_ sender: UIButton) {
+        
         // Increment the questions asked counter
         questionsAsked += 1
-        
         let correctAnswer = currentQuestion.CorrectAnswer()
         
+        //check if clicked button contains the correct answer
         if correctAnswer == sender.titleLabel?.text {
             correctQuestions += 1
             answerLabel.text = "Correct!"
-            sender.backgroundColor = UIColor.green
+            answerLabel.textColor = UIColor(red: 55/255.0, green: 118/255.0, blue: 147/255.0, alpha: 1.0)
         } else {
             answerLabel.text = "Sorry, wrong answer!"
+            answerLabel.textColor = UIColor.orange
         }
+        
+        //disable all buttons and make gray, so it is not possible to change the answer
+        answerButton1.setTitleColor(UIColor.gray, for: .normal)
+        answerButton1.isEnabled = false
+        answerButton2.setTitleColor(UIColor.gray, for: .normal)
+        answerButton2.isEnabled = false
+        answerButton3.setTitleColor(UIColor.gray, for: .normal)
+        answerButton3.isEnabled = false
+        answerButton4.setTitleColor(UIColor.gray, for: .normal)
+        answerButton4.isEnabled = false
+        
+        //set correct button to normal white color to highlite clicked button
+        sender.setTitleColor(UIColor.white, for: .normal)
+        answerLabel.isHidden = false
+        
+        //show button for next question
         playAgainButton.setTitle("Next question", for: .normal)
         playAgainButton.isHidden = false
+        
     }
     
     @IBAction func nextRound() {
+        
         if questionsAsked == trivia.questions.count {
             // Game is over
             displayScore()
@@ -94,15 +115,19 @@ class ViewController: UIViewController {
             // Continue game
             displayQuestion()
         }
+        
     }
     
 
     func playAgain() {
-    questionsAsked = 0
-    correctQuestions = 0
-    displayQuestion()
+        
+        //Set scores to 0 and display the first question
+        questionsAsked = 0
+        correctQuestions = 0
+        trivia.usedQuestions.removeAll() //reset array of used random questions
+        displayQuestion()
 
-}
+    }
     
 
     
@@ -130,33 +155,38 @@ class ViewController: UIViewController {
         AudioServicesPlaySystemSound(gameSound)
     }
     
-    func removeButtons() {
-        for locView in self.view.subviews {
-            if locView.isKind(of: UIButton.self) {
-            
-                locView.isHidden = true
-            }
-        }
+    
+    
+    /// Fill buttons with possible answers of current question
+    func createButtons() {
+        
+        //set default settings for 1st button
+        answerButton1.setTitle(currentQuestion.options[0], for: .normal)
+        answerButton1.layer.cornerRadius = 8
+        answerButton1.isEnabled = true
+        answerButton1.setTitleColor(UIColor.white, for: .normal)
+        
+        //set default settings for 2nd button
+        answerButton2.setTitle(currentQuestion.options[1], for: .normal)
+        answerButton2.layer.cornerRadius = 8
+        answerButton2.isEnabled = true
+        answerButton2.setTitleColor(UIColor.white, for: .normal)
+        
+        //set default settings for 3rd button
+        answerButton3.setTitle(currentQuestion.options[2], for: .normal)
+        answerButton3.layer.cornerRadius = 8
+        answerButton3.isEnabled = true
+        answerButton3.setTitleColor(UIColor.white, for: .normal)
+        
+        //set default settings for 4th button
+        answerButton4.setTitle(currentQuestion.options[3], for: .normal)
+        answerButton4.layer.cornerRadius = 8
+        answerButton4.isEnabled = true
+        answerButton4.setTitleColor(UIColor.white, for: .normal)
+        
+        answerLabel.isHidden = true
+        playAgainButton.isHidden = true
     }
     
-    func createButtons(){
-        let buttonWidth: CGFloat = (self.view.bounds.width - 60)
-        var buttonY: CGFloat = self.view.bounds.height / 3.0  // our Starting Offset, could be 0
-        let buttonX: CGFloat = (self.view.bounds.width - buttonWidth) / 2.0
-        
-        let numberOfButtons = CGFloat(currentQuestion.options.count)
-        for answer in currentQuestion.options {
-            
-            let answerButton = UIButton(frame: CGRect(x: buttonX, y: buttonY, width: buttonWidth, height: 50))
-            buttonY = buttonY + ((self.view.bounds.height - (self.view.bounds.height / 3.0)) / (numberOfButtons + 1)) // we are going to space these UIButtons 50px apart
-
-            answerButton.layer.cornerRadius = 8  // get some fancy pantsy rounding
-            answerButton.backgroundColor = UIColor(red: 55/255.0, green: 118/255.0, blue: 147/255.0, alpha: 1.0)
-            answerButton.setTitle("\(answer)", for: .normal) // We are going to use the item name as the Button Title here.
-            answerButton.titleLabel?.text = "\(answer)"
-            answerButton.addTarget(self, action: #selector(ViewController.checkAnswer(_:)), for: .touchUpInside)
-            self.view.addSubview(answerButton)  // myView in this case is the view you want these buttons added
-        }
-    }
 }
 

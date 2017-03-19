@@ -14,6 +14,7 @@ struct QuestionProvider {
     var correctAnswer: Int
     
     func CorrectAnswer() -> String {
+        //return the correctAnswer from the answeroptions array
         return options[correctAnswer-1]
     }
     
@@ -32,8 +33,8 @@ class QuestionsCollection {
                                           QuestionProvider(question: "Which country has most recently won consecutive World Cups in Soccer?", options: ["Italy", "Brazil", "Argentina", "Spain"], correctAnswer: 2),
                                           QuestionProvider(question: "Which of the following rivers is longest?", options: ["Yangtze", "Mississippi", "Congo", "Mekong"], correctAnswer: 2),
                                           QuestionProvider(question: "Which city is the oldest?", options: ["Mexico City", "Cape Town", "San Juan", "Sydney"], correctAnswer: 1),
- //                                         QuestionProvider(question: "Which country was the first to allow women to vote in national elections?", options: ["Poland", "United States", "Sweden", "Senegal"], correctAnswer: 1),
-        QuestionProvider(question: "Which country was the first to allow women to vote in national elections?", options: ["Poland", "United States", "Sweden"], correctAnswer: 1),
+                                          QuestionProvider(question: "Which country was the first to allow women to vote in national elections?", options: ["Poland", "United States", "Sweden", "Senegal"], correctAnswer: 1),
+ //       QuestionProvider(question: "Which country was the first to allow women to vote in national elections?", options: ["Poland", "United States", "Sweden"], correctAnswer: 1),
                                           QuestionProvider(question: "Which of these countries won the most medals in the 2012 Summer Games?", options: ["France", "Germany", "Japan", "Great Brittain"], correctAnswer: 4)
     ]
     
