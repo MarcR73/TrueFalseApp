@@ -39,7 +39,7 @@
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
-                                    <action selector="nextRound" destination="BYZ-38-t0r" eventType="touchUpInside" id="VtU-8d-upo"/>
+                                    <action selector="nextRound:" destination="BYZ-38-t0r" eventType="touchUpInside" id="F29-oe-uyM"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a4Q-6k-Pfc">

@@ -35,12 +35,15 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Load all sounds
         loadGameStartSound()
+        loadCorrectAnswerSound()
+        loadWrongAnswerSound()
         // Start game
         playGameStartSound()
         displayQuestion()
 
-    
     }
 
     override func didReceiveMemoryWarning() {
@@ -69,7 +72,21 @@ class ViewController: UIViewController {
         // Display play again button
         playAgainButton.isHidden = false
         playAgainButton.setTitle("Play Again", for: .normal)
-        questionField.text = "Way to go!\nYou got \(correctQuestions) out of \(trivia.questions.count) correct!"
+        
+        // Give a different message when score is lower than 6
+        switch correctQuestions {
+        case 1...5:questionField.text = "You have to try harder!\nYou only got \(correctQuestions) out of \(trivia.questions.count) correct!"
+        case 6...10:questionField.text = "Way to go!\nYou got \(correctQuestions) out of \(trivia.questions.count) correct!"
+        default:questionField.text = "That is strange, an incorrect number of questions are correct! Did you hack the system?"
+        }
+        
+        
+        // Hide all answer buttons
+        answerButton1.isHidden = true
+        answerButton2.isHidden = true
+        answerButton3.isHidden = true
+        answerButton4.isHidden = true
+        answerLabel.isHidden = true
     }
     
     @IBAction func checkAnswer(_ sender: UIButton) {
@@ -99,8 +116,16 @@ class ViewController: UIViewController {
         answerButton3.isEnabled = false
         answerButton4.setTitleColor(UIColor.gray, for: .normal)
         answerButton4.isEnabled = false
-        
-        //set correct button to normal white color to highlite clicked button
+    
+        // Show correct answer in green
+        switch currentQuestion.correctAnswer {
+        case 1: answerButton1.setTitleColor(UIColor(red: 0, green: 200/255.0, blue: 35/255.0, alpha: 1.0), for: .normal)
+        case 2: answerButton2.setTitleColor(UIColor(red: 0, green: 200/255.0, blue: 35/255.0, alpha: 1.0), for: .normal)
+        case 3: answerButton3.setTitleColor(UIColor(red: 0, green: 200/255.0, blue: 35/255.0, alpha: 1.0), for: .normal)
+        case 4: answerButton4.setTitleColor(UIColor(red: 0, green: 200/255.0, blue: 35/255.0, alpha: 1.0), for: .normal)
+        default: break
+        }
+        //set correct button to normal white color to highlight clicked button
         sender.setTitleColor(UIColor.white, for: .normal)
         answerLabel.isHidden = false
         
@@ -110,15 +135,20 @@ class ViewController: UIViewController {
         
     }
     
-    @IBAction func nextRound() {
+    
+    @IBAction func nextRound(_ sender: UIButton) {
         
-        if questionsAsked == trivia.questions.count {
-            // Game is over
-            displayScore()
-        } else {
-            // Continue game
-            displayQuestion()
+        if sender.titleLabel?.text == "Play Again" {
+            playAgain()
         }
+        else if questionsAsked == trivia.questions.count {
+                // Game is over
+                displayScore()
+            } else {
+                // Continue game
+                displayQuestion()
+            }
+    
         
     }
     
@@ -136,18 +166,6 @@ class ViewController: UIViewController {
 
     
     // MARK: Helper Methods
-    
-    func loadNextRoundWithDelay(seconds: Int) {
-        // Converts a delay in seconds to nanoseconds as signed 64 bit integer
-        let delay = Int64(NSEC_PER_SEC * UInt64(seconds))
-        // Calculates a time value to execute the method given current time and delay
-        let dispatchTime = DispatchTime.now() + Double(delay) / Double(NSEC_PER_SEC)
-        
-        // Executes the nextRound method at the dispatch time on the main queue
-        DispatchQueue.main.asyncAfter(deadline: dispatchTime) {
-            self.nextRound()
-        }
-    }
     
     func loadGameStartSound() {
         let pathToSoundFile = Bundle.main.path(forResource: "GameSound", ofType: "wav")
@@ -187,24 +205,28 @@ class ViewController: UIViewController {
         answerButton1.setTitle(currentQuestion.options[0], for: .normal)
         answerButton1.layer.cornerRadius = 8
         answerButton1.isEnabled = true
+        answerButton1.isHidden = false
         answerButton1.setTitleColor(UIColor.white, for: .normal)
         
         //set default settings for 2nd button
         answerButton2.setTitle(currentQuestion.options[1], for: .normal)
         answerButton2.layer.cornerRadius = 8
         answerButton2.isEnabled = true
+        answerButton2.isHidden = false
         answerButton2.setTitleColor(UIColor.white, for: .normal)
         
         //set default settings for 3rd button
         answerButton3.setTitle(currentQuestion.options[2], for: .normal)
         answerButton3.layer.cornerRadius = 8
         answerButton3.isEnabled = true
+        answerButton3.isHidden = false
         answerButton3.setTitleColor(UIColor.white, for: .normal)
         
         //set default settings for 4th button
         answerButton4.setTitle(currentQuestion.options[3], for: .normal)
         answerButton4.layer.cornerRadius = 8
         answerButton4.isEnabled = true
+        answerButton4.isHidden = false
         answerButton4.setTitleColor(UIColor.white, for: .normal)
         
         answerLabel.isHidden = true
